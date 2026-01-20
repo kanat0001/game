@@ -10,7 +10,7 @@ export default function Home() {
         <h1>Игры для детей</h1>
         <p>Играй, думай и проходи приключения</p>
 
-        <div class="games">
+        <div className="games">
           <Link to="/treasure" >
            <button>Найди клад</button>
         </Link>
@@ -43,9 +43,6 @@ export default function Home() {
         <Link to="/maze" className="cardStyle card3">
             
         </Link>
-        {/* <Link to="/differences2" className="cardStyle card3">
-            DIFF 2
-        </Link> */}
       </div>
     </div>
   );

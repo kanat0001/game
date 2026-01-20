@@ -13,7 +13,6 @@ export default function App() {
         <Route path="/treasure" element={<TreasureGame />} />
         <Route path="/differences" element={<DifferencesGame />} />
         <Route path="/maze" element={<MazeGame />} />
-        {/* <Route path="/differences2" element={<DifferencesGame2 />} /> */}
       </Routes>
 
   );

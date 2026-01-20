@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import "./differencesGame.css";
+import { Link } from "react-router-dom";
 
 const BASE_DIFFERENCES = [
   { x: 51.8, y: 36, r: 5 },
@@ -127,9 +128,14 @@ export default function DifferencesGame() {
     <div className="diff-game">
       {/* Header */}
       <div className="diff-header">
-        <h1 className="diff-title">🧩 Найди различия — {level.title}</h1>
+        <h1 className="diff-title">Найди различия — {level.title}</h1>
         <div className="diff-progress">Найдено: {progressText}</div>
       </div>
+        <div>
+          <Link to="/">
+            <button style={{ marginBottom: 20 }}>Домой</button>
+          </Link>
+        </div>
 
       {/* Controls */}
       <div className="diff-controls">

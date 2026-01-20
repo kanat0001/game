@@ -4,6 +4,7 @@ import { HiArrowSmDown } from "react-icons/hi";
 import { HiArrowSmLeft } from "react-icons/hi";
 import { HiArrowSmRight } from "react-icons/hi";
 import { HiArrowSmUp } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 // ✅ УРОВНИ: пока один (текущий)
 const levels = [
@@ -240,9 +241,15 @@ export default function MazeGame() {
     <div className="maze-game">
       <h1 className="maze-title">Лабиринт</h1>
 
+      <div>
+        <Link to="/">
+        <button style={{ marginBottom: 20 }}>Домой</button>
+        </Link>
+      </div>
+
       <div className="level-panel">
         <button onClick={prevLevel} disabled={levelIndex === 0}>
-          ⬅️ Уровень
+          <HiArrowSmLeft color="white" size={20}/>
         </button>
 
         <div className="level-name">
@@ -253,10 +260,10 @@ export default function MazeGame() {
           onClick={nextLevel}
           disabled={levelIndex === levels.length - 1}
         >
-          Уровень ➡️
+          <HiArrowSmRight color="white" size={20}/>
         </button>
 
-        <button onClick={restartLevel}>🔁</button>
+        <button onClick={restartLevel}>начать заново</button>
       </div>
 
       <div

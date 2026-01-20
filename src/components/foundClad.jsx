@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import "./TreasureGame.css";
-import { GiOpenTreasureChest } from "react-icons/gi";
-import { GiCrossMark } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 const SIZE = 10;
 const MAX_ATTEMPTS = 15;
@@ -145,6 +144,11 @@ export default function TreasureGame() {
   return (
     <div className="game">
       <h1 className="game-title">🪙 Найди клад</h1>
+        <div>
+          <Link to="/">
+            <button style={{ marginBottom: 20 }}>Домой</button>
+          </Link>
+        </div>
 
       <div className="game-toolbar">
         <button onClick={newGame}>Новая игра</button>
