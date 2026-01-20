@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+
+  background-image: url("/bg.jpg");
+  background-size: cover;        /* ключевое */
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* чтобы не дергалось на мобилках */
+  background-attachment: scroll;
+
+  /* цвет под картинкой, если она не покрыла */
+  background-color: #020617;
+
+  color: white;
+}
