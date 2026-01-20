@@ -1,57 +1,80 @@
 .game {
-  max-width: 700px;
+
+  width: min(700px, 100%);
   margin: 24px auto;
   padding: 16px;
-}
-
-.game-title {
-  margin-bottom: 12px;
-}
-.cell.active:hover {
-  cursor: grab;
+  box-sizing: border-box;
 }
 
 .game-toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 12px;
   align-items: center;
-}
-.game-toolbar button{
-    background-color: rgb(214, 152, 38);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-}
-.game-toolbar button:hover{
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-
-.game-toolbar button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
 }
 
 .grid {
   display: grid;
   gap: 6px;
+  width: 100%;
+  grid-auto-rows: 1fr;
 }
 
 .cell {
   aspect-ratio: 1 / 1;
+  min-width: 0;
   border-radius: 8px;
-  color: #111;
-  font-size: 18px;
   border: none;
+  font-size: 18px;
 }
 
-.cell.active {
-  cursor: pointer;
+.cell {
+  -webkit-tap-highlight-color: transparent;
 }
 
-.cell.disabled {
-  cursor: default;
+.cell:focus,
+.cell:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
+
+@media (max-width: 768px) {
+  .game {
+    padding: 12px;
+    margin: 16px auto;
+  }
+
+  .game-title {
+    font-size: 20px;
+  }
+
+  .cell {
+    font-size: 16px;
+    border-radius: 7px;
+  }
+
+  .grid {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-toolbar {
+    gap: 8px;
+  }
+
+  .game-toolbar button {
+    width: 100%;
+  }
+
+  .cell {
+    font-size: 14px;
+    border-radius: 6px;
+  }
+
+  .grid {
+    gap: 4px;
+  }
+}
+
