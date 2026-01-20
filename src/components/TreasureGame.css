@@ -20,24 +20,46 @@
   width: 100%;
   grid-auto-rows: 1fr;
 }
-
 .cell {
+  /* сброс нативного вида кнопки (важно для iOS) */
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* убираем внутренние отступы/границы браузера */
+  padding: 0;
+  border: 0;
+
+  /* чтобы размер не менялся из-за текста/фокуса */
+  box-sizing: border-box;
+  line-height: 1;
+
+  /* центрируем точку/эмодзи без влияния на размеры */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* твои свойства */
   aspect-ratio: 1 / 1;
-  min-width: 0;
   border-radius: 8px;
-  border: none;
   font-size: 18px;
-}
 
-.cell {
+  /* анти-эффекты тапа */
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
+/* фокус не должен добавлять “обводку/тень” */
 .cell:focus,
 .cell:focus-visible {
   outline: none;
   box-shadow: none;
 }
+
+/* на всякий — active не должен масштабировать */
+.cell:active {
+  transform: none;
+}
+
 
 @media (max-width: 768px) {
   .game {
