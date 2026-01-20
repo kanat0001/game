@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import "./MazeGame.css";
+import { HiArrowSmDown } from "react-icons/hi";
+import { HiArrowSmLeft } from "react-icons/hi";
+import { HiArrowSmRight } from "react-icons/hi";
+import { HiArrowSmUp } from "react-icons/hi";
 
 // ✅ УРОВНИ: пока один (текущий)
 const levels = [
@@ -275,14 +279,14 @@ export default function MazeGame() {
 
       {/* ✅ Стрелки для телефонов */}
       <div className="mobile-controls">
-        <button onClick={() => move(0, -1)}>⬆️</button>
+        <button onClick={() => move(0, -1)}><HiArrowSmUp/></button>
 
         <div className="mobile-row">
-          <button onClick={() => move(-1, 0)}>⬅️</button>
-          <button onClick={() => move(1, 0)}>➡️</button>
+          <button onClick={() => move(-1, 0)}><HiArrowSmLeft/></button>
+          <button onClick={() => move(1, 0)}><HiArrowSmRight/></button>
         </div>
 
-        <button onClick={() => move(0, 1)}>⬇️</button>
+        <button onClick={() => move(0, 1)}><HiArrowSmDown/></button>
       </div>
 
       {/* ✅ Сообщение о прохождении уровня (оверлей) */}

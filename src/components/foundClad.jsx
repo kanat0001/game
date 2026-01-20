@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import "./TreasureGame.css";
+import { GiOpenTreasureChest } from "react-icons/gi";
+import { GiCrossMark } from "react-icons/gi";
 
 const SIZE = 10;
+const MAX_ATTEMPTS = 15;
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
@@ -44,6 +47,10 @@ export default function TreasureGame() {
   const [attempts, setAttempts] = useState(0);
   const [lastClick, setLastClick] = useState(null);
   const [found, setFound] = useState(false);
+  const [lost, setLost] = useState(false);
+
+  // ✅ как ты просил — оставляем won (для оверлея)
+  const won = found;
 
   const hint = useMemo(() => {
     if (!lastClick) return null;
@@ -58,24 +65,58 @@ export default function TreasureGame() {
     setAttempts(0);
     setLastClick(null);
     setFound(false);
+    setLost(false);
   }
 
+  // ✅ названия как в твоём оверлее
+  function restartLevel() {
+    newGame();
+  }
+
+  // Уровней пока нет — просто новая игра (оставляем для совместимости)
+  function nextLevel() {
+    newGame();
+  }
+  const levelIndex = 0;
+  const levels = [0];
+
   function onCellClick(r, c) {
-    if (found) return;
+    if (found || lost) return;
 
     const k = keyOf(r, c);
 
+    // Если клетка уже открыта — не считаем попытку
+    if (opened.has(k)) {
+      setLastClick({ r, c });
+      return;
+    }
+
+    // Открываем клетку
     setOpened((prev) => {
       const next = new Set(prev);
-      if (!next.has(k)) next.add(k);
+      next.add(k);
       return next;
     });
 
-    setAttempts((prev) => (opened.has(k) ? prev : prev + 1));
+    // Считаем попытку (только если клик по новой клетке)
+    setAttempts((prev) => {
+      const nextAttempts = prev + 1;
+
+      // Если это не клад, и попытки закончились — проигрыш
+      const isTreasureNow = r === treasure.r && c === treasure.c;
+      if (!isTreasureNow && nextAttempts >= MAX_ATTEMPTS) {
+        setLost(true);
+      }
+
+      return nextAttempts;
+    });
+
     setLastClick({ r, c });
 
+    // Победа
     if (r === treasure.r && c === treasure.c) {
       setFound(true);
+      setLost(false);
     }
   }
 
@@ -99,14 +140,20 @@ export default function TreasureGame() {
     return `rgb(${R}, ${G}, ${B})`;
   }
 
+  const blocked = found || lost;
+
   return (
     <div className="game">
       <h1 className="game-title">🪙 Найди клад</h1>
 
       <div className="game-toolbar">
         <button onClick={newGame}>Новая игра</button>
-        <div>Попытки: {attempts}</div>
-        <div>{hint || "Сделай первый клик"}</div>
+        <div>
+          Попытки: {attempts}/{MAX_ATTEMPTS}
+        </div>
+        <div>
+          {lost ? "Попытки закончились 😢" : hint || "Сделай первый клик"}
+        </div>
       </div>
 
       <div
@@ -122,14 +169,42 @@ export default function TreasureGame() {
             <button
               key={keyOf(r, c)}
               onClick={() => onCellClick(r, c)}
-              className={`cell ${found ? "disabled" : "active"}`}
+              className={`cell ${blocked ? "disabled" : "active"}`}
               style={{ background: cellBg(r, c) }}
             >
-              {found && isTreasure ? "🔥" : opened.has(keyOf(r, c)) ? "•" : ""}
+              {found && isTreasure ? <GiOpenTreasureChest size={22}/> : opened.has(keyOf(r, c)) ? <GiCrossMark size={22} color="white"/>  : ""} 
             </button>
           );
         })}
       </div>
+
+      {/* ✅ Сообщение о прохождении уровня (оверлей) */}
+      {won && (
+        <div className="win-overlay">
+          <div className="win-modal">
+            <h2>🎉 Уровень пройден!</h2>
+            <p>Молодец! Хочешь сыграть еще раз?</p>
+
+            <div className="win-actions">
+              <button onClick={restartLevel}>🔁 Повторить</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Сообщение о проигрыше (оверлей) */}
+      {lost && (
+        <div className="lose-overlay">
+          <div className="lose-modal">
+            <h2>😢 Ты проиграл</h2>
+            <p>Попытки закончились. Сыграем ещё раз?</p>
+
+            <div className="lose-actions">
+              <button onClick={newGame}>🔁 Играть заново</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

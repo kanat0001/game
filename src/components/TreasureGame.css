@@ -1,9 +1,12 @@
 .game {
-
   width: min(700px, 100%);
   margin: 24px auto;
   padding: 16px;
   box-sizing: border-box;
+}
+
+.game-title {
+  margin-bottom: 12px;
 }
 
 .game-toolbar {
@@ -14,53 +17,155 @@
   align-items: center;
 }
 
+.game-toolbar button {
+  background-color: rgb(214, 152, 38);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.game-toolbar button:hover {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.game-toolbar button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
 .grid {
   display: grid;
   gap: 6px;
   width: 100%;
-  grid-auto-rows: 1fr;
+  max-width: 100%;
 }
+
+/* ✅ фикс для мобилок: кнопки не “тянутся” при тапе */
 .cell {
-  /* сброс нативного вида кнопки (важно для iOS) */
   -webkit-appearance: none;
   appearance: none;
-
-  /* убираем внутренние отступы/границы браузера */
   padding: 0;
   border: 0;
-
-  /* чтобы размер не менялся из-за текста/фокуса */
   box-sizing: border-box;
-  line-height: 1;
 
-  /* центрируем точку/эмодзи без влияния на размеры */
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  color: #111;
+  font-size: 18px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  /* твои свойства */
-  aspect-ratio: 1 / 1;
-  border-radius: 8px;
-  font-size: 18px;
-
-  /* анти-эффекты тапа */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  line-height: 1;
 }
 
-/* фокус не должен добавлять “обводку/тень” */
 .cell:focus,
 .cell:focus-visible {
   outline: none;
   box-shadow: none;
 }
 
-/* на всякий — active не должен масштабировать */
 .cell:active {
   transform: none;
 }
 
+.cell.active {
+  cursor: pointer;
+}
 
+.cell.disabled {
+  cursor: default;
+}
+
+/* =========================
+   WIN OVERLAY
+========================= */
+.win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 999;
+}
+
+.win-modal {
+  width: min(420px, 100%);
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.win-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.win-actions button {
+  background-color: rgb(214, 152, 38);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.win-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   LOSE OVERLAY
+========================= */
+.lose-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 999;
+}
+
+.lose-modal {
+  width: min(420px, 100%);
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.lose-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.lose-actions button {
+  background-color: rgb(214, 152, 38);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+/* =========================
+   ADAPTIVE
+========================= */
 @media (max-width: 768px) {
   .game {
     padding: 12px;
@@ -99,4 +204,3 @@
     gap: 4px;
   }
 }
-
