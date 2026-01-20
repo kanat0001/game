@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import "./TreasureGame.css";
 
 const SIZE = 10;
 
@@ -27,6 +28,10 @@ function hintByDistance(d) {
   if (d <= 5) return "Тепло";
   if (d <= 7) return "Холодно";
   return "Очень холодно";
+}
+
+function lerp(a, b, t) {
+  return Math.round(a + (b - a) * t);
 }
 
 export default function TreasureGame() {
@@ -76,36 +81,37 @@ export default function TreasureGame() {
 
   function cellBg(r, c) {
     const k = keyOf(r, c);
-    if (!opened.has(k)) return "#1f2937";
 
+    if (!opened.has(k)) return "#9e9437";
     if (found && r === treasure.r && c === treasure.c) return "#16a34a";
 
     const d = distance(r, c, treasure.r, treasure.c);
     const maxD = Math.sqrt((SIZE - 1) ** 2 + (SIZE - 1) ** 2);
     const t = 1 - clamp(d / maxD, 0, 1);
 
-    const base = 60;
-    const add = Math.floor(130 * t);
+    const cold = { r: 37, g: 99, b: 235 };
+    const hot = { r: 239, g: 68, b: 68 };
 
-    return `rgb(${base + add}, ${base + add}, ${base})`;
+    const R = lerp(cold.r, hot.r, t);
+    const G = lerp(cold.g, hot.g, t);
+    const B = lerp(cold.b, hot.b, t);
+
+    return `rgb(${R}, ${G}, ${B})`;
   }
 
   return (
-    <div style={{ maxWidth: 700, margin: "24px auto", padding: 16 }}>
-      <h1>🪙 Найди клад</h1>
+    <div className="game">
+      <h1 className="game-title">🪙 Найди клад</h1>
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+      <div className="game-toolbar">
         <button onClick={newGame}>Новая игра</button>
         <div>Попытки: {attempts}</div>
         <div>{hint || "Сделай первый клик"}</div>
       </div>
 
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${SIZE}, 1fr)`,
-          gap: 6,
-        }}
+        className="grid"
+        style={{ gridTemplateColumns: `repeat(${SIZE}, 1fr)` }}
       >
         {Array.from({ length: SIZE * SIZE }).map((_, i) => {
           const r = Math.floor(i / SIZE);
@@ -116,14 +122,8 @@ export default function TreasureGame() {
             <button
               key={keyOf(r, c)}
               onClick={() => onCellClick(r, c)}
-              style={{
-                aspectRatio: "1 / 1",
-                borderRadius: 8,
-                background: cellBg(r, c),
-                color: "#111",
-                fontSize: 18,
-                cursor: found ? "default" : "pointer",
-              }}
+              className={`cell ${found ? "disabled" : "active"}`}
+              style={{ background: cellBg(r, c) }}
             >
               {found && isTreasure ? "🔥" : opened.has(keyOf(r, c)) ? "•" : ""}
             </button>

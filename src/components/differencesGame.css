@@ -1,0 +1,209 @@
+.diff-game {
+  max-width: 980px;
+  margin: 24px auto;
+  padding: 16px;
+}
+
+/* Header */
+.diff-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.diff-title {
+  margin: 0;
+}
+
+.diff-progress {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+/* Controls */
+.diff-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.diff-level-btn {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  background: white;
+  color: #111827;
+}
+
+.diff-level-btn.active {
+  background: #111827;
+  color: white;
+}
+
+.diff-next-btn {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+}
+
+.diff-next-btn.disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.diff-message {
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+}
+
+
+/* Images layout */
+.diff-images {
+  display: flex;
+  gap: 16px;
+}
+
+.diff-col {
+  width: 50%;
+}
+
+.diff-col-title {
+  margin-bottom: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.diff-image-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.diff-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+}
+
+.diff-image.playable {
+  cursor: crosshair;
+}
+
+.diff-image.done {
+  cursor: default;
+}
+
+/* Found circles */
+.diff-circle {
+  position: absolute;
+  border: 2px solid #22c55e;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ✅ ДЕТСКИЙ ОВЕРЛЕЙ ПОБЕДЫ */
+
+.diff-win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 999;
+}
+
+.diff-win-modal {
+  background: linear-gradient(180deg, #ffffff, #fef3c7);
+  border-radius: 20px;
+  padding: 20px 18px;
+  width: min(380px, 100%);
+  text-align: center;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 3px #fde68a;
+
+  animation: diff-pop 0.35s ease-out;
+}
+
+.diff-win-emoji {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+.diff-win-title {
+  font-size: 22px;
+  margin: 4px 0;
+}
+
+.diff-win-text {
+  font-size: 14px;
+  color: #374151;
+  margin: 0 0 14px;
+}
+
+.diff-win-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.diff-win-btn {
+  flex: 1;
+  padding: 12px 10px;
+  border-radius: 14px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.diff-win-btn:hover {
+  transform: scale(1.05);
+}
+
+.diff-win-btn:active {
+  transform: scale(0.97);
+}
+
+.diff-win-btn-repeat {
+  background: #fde68a;
+}
+
+.diff-win-btn-next {
+  background: #6cd893;
+}
+
+.diff-win-btn-next.disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+@keyframes diff-pop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+

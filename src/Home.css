@@ -1,0 +1,100 @@
+
+.title{
+    max-width: 1200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    margin: 40px auto; /* ⬅ центр по горизонтали */
+}
+
+.title {
+  text-align: center;
+}
+
+.title h1 {
+  font-size: 56px;
+  margin-bottom: 12px;
+}
+
+.title p {
+  font-size: 22px;
+  margin-bottom: 24px;
+}
+
+.games {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.games button {
+  font-size: 20px;
+  padding: 14px 28px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  background: #FFC83D;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+
+} 
+.games button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+.wrapper-card{  
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+    
+
+}
+.cardStyle {
+  display: flex;
+  height: 300px;
+  width: 400px;
+  overflow: hidden;
+  margin-top: 200px;
+
+  justify-content: center;
+
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  border-radius: 50px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cardStyle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+.card1{
+    background-image: url("/klad.png");
+    background-size: cover;      /* НЕ режет */
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+.card2{
+    background-image: url("/diff.png");
+    background-size: cover;      /* НЕ режет */
+    background-position: center;
+    background-repeat: no-repeat;
+    
+}
+.card3{
+    background-image: url("/labirint.png");
+    background-size: cover;      /* НЕ режет */
+    background-position: center;
+    background-repeat: no-repeat;
+    
+}

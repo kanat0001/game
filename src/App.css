@@ -1,4 +1,12 @@
-.app{
-    width: 100%;
-    height: 100%;
+@font-face {
+  font-family: "ComicSansCustom";
+  src: url("../assets/fonts/ComicSansMS.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+  font-family: "ComicSansCustom", sans-serif;
 }

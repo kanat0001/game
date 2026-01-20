@@ -9,8 +9,8 @@ import { useMemo, useState } from "react";
  *    Внизу появится готовый массив differences — скопируй его и вставь в INITIAL_DIFFERENCES.
  */
 
-const IMG_LEFT = "left-tigrenok1.png";
-const IMG_RIGHT = "/right-tigrenok1.png";
+const IMG_LEFT = "/left-boy.png";
+const IMG_RIGHT = "/right-boy.png";
 
 // СЮДА потом вставишь свои реальные точки (которые насобираешь в режиме разметки)
 const INITIAL_DIFFERENCES = [

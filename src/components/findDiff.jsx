@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import "./DifferencesGame.css";
 
 const BASE_DIFFERENCES = [
   { x: 51.8, y: 36, r: 5 },
@@ -11,27 +12,28 @@ const BASE_DIFFERENCES = [
   { x: 47, y: 41.3, r: 5 },
   { x: 46.2, y: 52.8, r: 5 },
 ];
+
 const BASE_DIFFERENCES2 = [
   { x: 88.5, y: 18.5, r: 7 },
   { x: 73.6, y: 44.4, r: 7 },
   { x: 91, y: 76.6, r: 7 },
-  { x: 29.6, y: 37.1, r: 7 }
+  { x: 29.6, y: 37.1, r: 7 },
+  { x: 46.2, y: 67.2, r: 7 }
 ];
+
 const BASE_DIFFERENCES3 = [
   { x: 55.7, y: 27.6, r: 6 },
   { x: 39.3, y: 64.5, r: 6 },
   { x: 51.8, y: 58.4, r: 6 },
   { x: 51.6, y: 44.8, r: 6 },
-  { x: 75, y: 60.2, r: 6 }
+  { x: 75, y: 60.2, r: 6 },
 ];
 
-// 4 уровня с теми же данными (разные названия, картинки те же)
 const LEVELS = [
   {
     id: "lvl1",
     title: "Уровень 1",
     leftImg: "/left-cat.png",
-    // если файл реально называется "right-cat (2).png" — нужны %20
     rightImg: "/right-cat%20(2).png",
     differences: BASE_DIFFERENCES,
   },
@@ -49,7 +51,6 @@ const LEVELS = [
     rightImg: "/right-tigrenok1.png",
     differences: BASE_DIFFERENCES3,
   },
-
 ];
 
 function clamp(n, min, max) {
@@ -86,11 +87,6 @@ export default function DifferencesGame() {
 
   const isLastLevel = levelIndex === LEVELS.length - 1;
 
-  function resetLevel() {
-    setFound([]);
-    setMessage("Кликай по отличиям 🙂");
-  }
-
   function goLevel(nextIndex) {
     setLevelIndex(nextIndex);
     setFound([]);
@@ -103,11 +99,15 @@ export default function DifferencesGame() {
     goLevel(levelIndex + 1);
   }
 
+  function restartLevel() {
+    setFound([]);
+    setMessage("Кликай по отличиям 🙂");
+  }
+
   function onImageClick(e) {
     if (allFound) return;
 
     const { x, y } = getPercentXY(e);
-
     let hit = false;
 
     level.differences.forEach((d, i) => {
@@ -121,48 +121,23 @@ export default function DifferencesGame() {
     setMessage(hit ? "Нашёл! ✅" : "Мимо ❌");
   }
 
-  return (
-    <div style={{ maxWidth: 980, margin: "24px auto", padding: 16 }}>
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          alignItems: "center",
-          flexWrap: "wrap",
-          marginBottom: 12,
-        }}
-      >
-        <h1 style={{ margin: 0 }}>🧩 Найди различия — {level.title}</h1>
+  const nextDisabled = !allFound || isLastLevel;
 
-        <div style={{ marginLeft: "auto", fontWeight: 700 }}>
-          Найдено: {progressText}
-        </div>
+  return (
+    <div className="diff-game">
+      {/* Header */}
+      <div className="diff-header">
+        <h1 className="diff-title">🧩 Найди различия — {level.title}</h1>
+        <div className="diff-progress">Найдено: {progressText}</div>
       </div>
 
       {/* Controls */}
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          flexWrap: "wrap",
-          alignItems: "center",
-          marginBottom: 14,
-        }}
-      >
-        {/* Кнопки уровней (можешь убрать, если хочешь только next) */}
+      <div className="diff-controls">
         {LEVELS.map((l, i) => (
           <button
             key={l.id}
             onClick={() => goLevel(i)}
-            style={{
-              padding: "8px 10px",
-              borderRadius: 10,
-              border: "1px solid #e5e7eb",
-              cursor: "pointer",
-              background: i === levelIndex ? "#111827" : "white",
-              color: i === levelIndex ? "white" : "#111827",
-            }}
+            className={`diff-level-btn ${i === levelIndex ? "active" : ""}`}
           >
             {l.title}
           </button>
@@ -170,20 +145,13 @@ export default function DifferencesGame() {
 
         <button
           onClick={nextLevel}
-          disabled={!allFound || isLastLevel}
-          style={{
-            padding: "8px 10px",
-            borderRadius: 10,
-            border: "1px solid #e5e7eb",
-            cursor: !allFound || isLastLevel ? "not-allowed" : "pointer",
-            background: !allFound || isLastLevel ? "#f3f4f6" : "#111827",
-            color: !allFound || isLastLevel ? "#9ca3af" : "white",
-          }}
+          disabled={nextDisabled}
+          className={`diff-next-btn ${nextDisabled ? "disabled" : ""}`}
         >
           Следующий уровень →
         </button>
 
-        <div style={{ display: "flex", alignItems: "center", color: "#6b7280" }}>
+        <div className="diff-message">
           {allFound
             ? isLastLevel
               ? "🎉 Все уровни пройдены!"
@@ -193,59 +161,80 @@ export default function DifferencesGame() {
       </div>
 
       {/* Images */}
-      <div style={{ display: "flex", gap: 16 }}>
-        {[{ src: level.leftImg, label: "Левая" }, { src: level.rightImg, label: "Правая" }].map(
-          (img) => (
-            <div key={img.label} style={{ width: "50%" }}>
-              <div style={{ marginBottom: 8, color: "#6b7280", fontSize: 13 }}>
-                {level.title} — {img.label}
-              </div>
-
-              <div style={{ position: "relative", borderRadius: 14, overflow: "hidden" }}>
-                <img
-                  src={img.src}
-                  alt={img.label}
-                  onClick={onImageClick}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                    cursor: allFound ? "default" : "crosshair",
-                    userSelect: "none",
-                  }}
-                  draggable={false}
-                />
-
-                {/* circles: показываем ТОЛЬКО найденные */}
-                {found.map((idx) => {
-                  const d = level.differences[idx];
-                  return (
-                    <div
-                      key={`${img.label}-${idx}`}
-                      style={{
-                        position: "absolute",
-                        left: `${d.x}%`,
-                        top: `${d.y}%`,
-                        width: `${d.r * 2}%`,
-                        height: `${d.r * 2}%`,
-                        border: "2px solid #22c55e",
-                        borderRadius: "50%",
-                        transform: "translate(-50%, -50%)",
-                        pointerEvents: "none",
-                        boxShadow: "0 0 0 2px rgba(0,0,0,0.12)",
-                      }}
-                    />
-                  );
-                })}
-              </div>
+      <div className="diff-images">
+        {[
+          { src: level.leftImg, label: "Левая" },
+          { src: level.rightImg, label: "Правая" },
+        ].map((img) => (
+          <div key={img.label} className="diff-col">
+            <div className="diff-col-title">
+              {level.title} — {img.label}
             </div>
-          )
-        )}
+
+            <div className="diff-image-wrap">
+              <img
+                src={img.src}
+                alt={img.label}
+                onClick={onImageClick}
+                className={`diff-image ${allFound ? "done" : "playable"}`}
+                draggable={false}
+              />
+
+              {/* circles: показываем ТОЛЬКО найденные */}
+              {found.map((idx) => {
+                const d = level.differences[idx];
+                return (
+                  <div
+                    key={`${img.label}-${idx}`}
+                    className="diff-circle"
+                    style={{
+                      left: `${d.x}%`,
+                      top: `${d.y}%`,
+                      width: `${d.r * 2}%`,
+                      height: `${d.r * 2}%`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div style={{ marginTop: 14, color: "#6b7280", fontSize: 13 }}>
-        Подсказка: лучше, когда обе картинки одного размера и без обрезки.
-      </div>
+      {/* ✅ Оверлей после прохождения уровня */}
+      {allFound && (
+        <div className="diff-win-overlay">
+          <div className="diff-win-modal">
+            <div className="diff-win-emoji">🎉✨🧩</div>
+
+            <h2 className="diff-win-title">
+              {isLastLevel ? "Ты прошёл все уровни!" : "Уровень пройден!"}
+            </h2>
+
+            <p className="diff-win-text">
+              {isLastLevel
+                ? "Супер! Ты нашёл все отличия во всех картинках 🏆"
+                : "Круто! Хочешь перейти дальше или сыграть ещё раз?"}
+            </p>
+
+            <div className="diff-win-actions">
+              <button className="diff-win-btn diff-win-btn-repeat" onClick={restartLevel}>
+                🔁 Ещё раз
+              </button>
+
+              <button
+                className={`diff-win-btn diff-win-btn-next ${
+                  isLastLevel ? "disabled" : ""
+                }`}
+                onClick={nextLevel}
+                disabled={isLastLevel}
+              >
+                🚀 Дальше
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

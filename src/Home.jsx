@@ -1,46 +1,53 @@
 import { Link } from "react-router-dom";
+import './Home.css'
+
 
 export default function Home() {
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
-      <h1>Игры для детей</h1>
-      <p>Выбери игру</p>
+    <div className="wrapper" style={{ maxWidth: 1400, margin: "0 auto", padding: 24 } }>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 20,
-          marginTop: 40,
-        }}
-      >
-        <Link to="/treasure" style={cardStyle}>
-          Найди клад
+      <div className="title">
+        <h1>Игры для детей</h1>
+        <p>Играй, думай и проходи приключения</p>
+
+        <div class="games">
+          <Link to="/treasure" >
+           <button>Найди клад</button>
         </Link>
 
-        <Link to="/differences" style={cardStyle}>
-          Найди различия
+         <Link to="/differences" >
+            <button>Найди различия</button>
         </Link>
 
-        <Link to="/maze" style={cardStyle}>
-            Лабиринт
+        <Link to="/maze" >
+            <button>Лабиринт</button>
         </Link>
-        {/* <Link to="/differences2" style={cardStyle}>
-        найди отличие 2
+        
+        
+        
+  </div>
+
+      </div>
+      
+
+      <div className="wrapper-card">
+        <Link to="/treasure" className="cardStyle card1">
+           
+
+        </Link>
+
+        <Link to="/differences" className="cardStyle card2">
+          
+        </Link>
+
+        <Link to="/maze" className="cardStyle card3">
+            
+        </Link>
+        {/* <Link to="/differences2" className="cardStyle card3">
+            DIFF 2
         </Link> */}
       </div>
     </div>
   );
 }
 
-const cardStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  height: 160,
-  borderRadius: 16,
-  background: "#111827",
-  color: "white",
-  fontSize: 20,
-  textDecoration: "none",
-};

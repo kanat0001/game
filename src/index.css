@@ -2,12 +2,16 @@ html,
 body {
   height: 100%;
   margin: 0;
+
+  font-family: "Fredoka", system-ui, sans-serif;
+
+
 }
 
 body {
   min-height: 100vh;
 
-  background-image: url("/bg.jpg");
+  background-image: url("/bg2.jpg");
   background-size: cover;        /* ключевое */
   background-position: center;
   background-repeat: no-repeat;
@@ -15,8 +19,8 @@ body {
   /* чтобы не дергалось на мобилках */
   background-attachment: scroll;
 
-  /* цвет под картинкой, если она не покрыла */
   background-color: #020617;
 
-  color: white;
+  color: #45acdb;
+
 }

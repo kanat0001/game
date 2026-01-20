@@ -1,39 +1,216 @@
-import { useEffect, useState } from "react"; 
-// ВСЕ строки ОДИНАКОВОЙ длины (10)
-const maze = [
-  "####################",
-  "#S                 #",
-  "### ### ##### ### ##",
-  "#     #   #   #    #",
-  "# ##### ### ### ####",
-  "#   #       #      #",
-  "## ### ##### #######",
-  "#    #   #   #     #",
-  "######## # ### ### #",
-  "#      # #   #   # #",
-  "# ###### ### ### # #",
-  "# #          #   # #",
-  "# # ######## # ### #",
-  "# #        # #     #",
-  "# ######## # #######",
-  "#       #  #       #",
-  "####### #### ##### #",
-  "#            #     #",
-  "##############E#####",
+import { useEffect, useMemo, useState } from "react";
+import "./MazeGame.css";
+
+// ✅ УРОВНИ: пока один (текущий)
+const levels = [
+  {
+    name: "Уровень 1",
+    maze: [
+      "####################",
+      "#S                 #",
+      "### ### ##### ### ##",
+      "#     #   #   #    #",
+      "# ##### ### ### ####",
+      "#   #       #      #",
+      "## ### ##### #######",
+      "#    #   #   #     #",
+      "######## # ### ### #",
+      "#      # #   #   # #",
+      "# ###### ### ### # #",
+      "# #          #   # #",
+      "# # ######## # ### #",
+      "# #        # #     #",
+      "# ######## # #######",
+      "#       #  #       #",
+      "####### #### ##### #",
+      "#            #     #",
+      "##############E#####",
+    ],
+  },
+  {
+    name: "Уровень 2",
+    maze: [
+    "####################",
+    "#S                 #",
+    "# ### ##### ### ####",
+    "#   #   # #   #    #",
+    "### # ### # ### ####",
+    "#   # #   #   #    #",
+    "# ### # ##### #### #",
+    "#     #     #      #",
+    "### ### ### ###### #",
+    "#   #     #      # #",
+    "# # ##### ###### # #",
+    "# #     #      # # #",
+    "# ##### ###### # # #",
+    "#     #      # #   #",
+    "####### #### # #####",
+    "#       #    #     #",
+    "# ##### ######### ##",
+    "#     # #         E#",
+    "####################",
+  ]
+  },
+  {
+    name: "Уровень 3",
+    maze:  [
+    "####################",
+    "#S        #        #",
+    "# ####### # ###### #",
+    "# #     # #      # #",
+    "# # ### # #####  # #",
+    "# # #   #     #### #",
+    "# # # ####### #   ##",
+    "#   # # #   # #    #",
+    "##### # # # # ######",
+    "#     #   # #      #",
+    "### ### # # ###### #",
+    "#   #   # #      # #",
+    "# # # ### ###### # #",
+    "# # #   #      #   #",
+    "# # ### ###### #####",
+    "# #     #    #     #",
+    "# ####### ## # #####",
+    "#            #    E#",
+    "####################",
+  ],
+  },
+  {
+    name: "Уровень 4",
+    maze:  [
+    "####################",
+    "#S            #    #",
+    "### ### ####### ## #",
+    "#     #       #    #",
+    "# ##### ##### # ####",
+    "#     #   #   #    #",
+    "# ### ### # ### ####",
+    "# # #     #   #    #",
+    "# # ####### ### ####",
+    "# #       #   #    #",
+    "# ####### # ### ## #",
+    "#       # #     #  #",
+    "####### # ##### # ##",
+    "#     # #   #   #  #",
+    "# ### # ### # ### ##",
+    "# #   #   # #   #  #",
+    "# # ##### # ### # ##",
+    "# #       #     #E #",
+    "####################",
+  ],
+  },
+  {
+    name: "Уровень 5",
+    maze:  [
+    "####################",
+    "#S  #      #       #",
+    "# ### ### # ### ####",
+    "#   #   # #   #    #",
+    "### ### # ### ######",
+    "#     # #   #      #",
+    "##### # ### ###### #",
+    "#   # #   #      # #",
+    "# # # ### ###### # #",
+    "# # #   #      # # #",
+    "# # ### ###### # # #",
+    "# #   #      # #   #",
+    "# ### # ###### ### #",
+    "#   # #        #   #",
+    "### # ########## ###",
+    "#   #            # #",
+    "# ####### ###### # #",
+    "#         #       E#",
+    "####################",
+  ],
+  },
+  {
+    name: "Уровень 6",
+    maze:  [
+    "####################",
+    "#S #      #       ##",
+    "# ### ####### ###  #",
+    "#   #       #   #  #",
+    "### # ##### # # ####",
+    "#   # #   # # #    #",
+    "# ### # # # # #### #",
+    "#     # # # #    # #",
+    "##### # # # #### # #",
+    "#     # # #    # # #",
+    "# ####### #### # # #",
+    "#       #    # #   #",
+    "####### #### # ### #",
+    "#     #      #     #",
+    "# ### ########### ##",
+    "#   #         #    #",
+    "# ####### ### # ####",
+    "#         #   #   E#",
+    "####################",
+  ],
+  },
+  
 ];
 
+function findStart(maze) {
+  for (let y = 0; y < maze.length; y++) {
+    const x = maze[y].indexOf("S");
+    if (x !== -1) return { x, y };
+  }
+  return { x: 1, y: 1 };
+}
+
 export default function MazeGame() {
-  const [pos, setPos] = useState({ x: 1, y: 1 });
+  const [levelIndex, setLevelIndex] = useState(0);
   const [won, setWon] = useState(false);
+
+  const maze = levels[levelIndex].maze;
+  const startPos = useMemo(() => findStart(maze), [maze]);
+  const [pos, setPos] = useState(startPos);
 
   const height = maze.length;
   const width = maze[0].length;
 
+  // при смене уровня — сброс
+  useEffect(() => {
+    setPos(startPos);
+    setWon(false);
+  }, [startPos]);
+
+  function restartLevel() {
+    setPos(startPos);
+    setWon(false);
+  }
+
+  function prevLevel() {
+    setLevelIndex((i) => Math.max(0, i - 1));
+  }
+
+  function nextLevel() {
+    setLevelIndex((i) => Math.min(levels.length - 1, i + 1));
+  }
+
+  // ✅ Единая функция движения (клавиатура + кнопки)
+  function move(dx, dy) {
+    if (won) return;
+
+    const nx = pos.x + dx;
+    const ny = pos.y + dy;
+
+    if (nx < 0 || ny < 0 || nx >= width || ny >= height) return;
+
+    const cell = maze[ny][nx];
+    if (cell === "#") return;
+
+    setPos({ x: nx, y: ny });
+
+    if (cell === "E") {
+      setWon(true);
+      if (navigator.vibrate) navigator.vibrate(120);
+    }
+  }
+
+  // клавиатура
   useEffect(() => {
     function onKey(e) {
-      if (won) return;
-
-      // НЕ зависит от языка клавиатуры
       const moves = {
         ArrowUp: [0, -1],
         ArrowDown: [0, 1],
@@ -48,60 +225,85 @@ export default function MazeGame() {
       if (!moves[e.code]) return;
 
       const [dx, dy] = moves[e.code];
-      const nx = pos.x + dx;
-      const ny = pos.y + dy;
-
-      // ⛔ ЗАЩИТА ОТ ВЫХОДА ЗА ГРАНИЦЫ
-      if (nx < 0 || ny < 0 || nx >= width || ny >= height) return;
-
-      const cell = maze[ny][nx];
-      if (cell === "#") return;
-
-      setPos({ x: nx, y: ny });
-
-      if (cell === "E") {
-        setWon(true);
-      }
+      move(dx, dy);
     }
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [pos, won, width, height]);
+  }, [pos, won, maze, width, height]);
 
   return (
-    <div style={{ maxWidth: 420, margin: "24px auto" }}>
-      <h1>🧱 Лабиринт</h1>
+    <div className="maze-game">
+      <h1 className="maze-title">Лабиринт</h1>
+
+      <div className="level-panel">
+        <button onClick={prevLevel} disabled={levelIndex === 0}>
+          ⬅️ Уровень
+        </button>
+
+        <div className="level-name">
+          {levels[levelIndex].name} ({levelIndex + 1}/{levels.length})
+        </div>
+
+        <button
+          onClick={nextLevel}
+          disabled={levelIndex === levels.length - 1}
+        >
+          Уровень ➡️
+        </button>
+
+        <button onClick={restartLevel}>🔁</button>
+      </div>
 
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${width}, 1fr)`,
-          gap: 0,
-        }}
+        className="maze-grid"
+        style={{ gridTemplateColumns: `repeat(${width}, 1fr)` }}
       >
         {maze.map((row, y) =>
           row.split("").map((cell, x) => {
             const isPlayer = pos.x === x && pos.y === y;
 
-            let bg = "#e5e7eb";
-            if (cell === "#") bg = "#22c55e";
-            if (cell === "E") bg = "#212ab1";
+            let className = "maze-cell";
+            if (cell === "#") className += " maze-wall";
+            if (cell === "E") className += " maze-exit";
+            if (isPlayer) className += " maze-player";
 
-            return (
-              <div
-                key={`${x}-${y}`}
-                style={{
-                  aspectRatio: "1",
-                  background: isPlayer ? "#ef4444" : bg,
-                }}
-              />
-            );
+            return <div key={`${x}-${y}`} className={className} />;
           })
         )}
       </div>
 
-      {won && <h2 style={{ marginTop: 16 }}>🎉 Ты вышел из лабиринта!</h2>}
-      <p>Управление: WASD или стрелки</p>
+      {/* ✅ Стрелки для телефонов */}
+      <div className="mobile-controls">
+        <button onClick={() => move(0, -1)}>⬆️</button>
+
+        <div className="mobile-row">
+          <button onClick={() => move(-1, 0)}>⬅️</button>
+          <button onClick={() => move(1, 0)}>➡️</button>
+        </div>
+
+        <button onClick={() => move(0, 1)}>⬇️</button>
+      </div>
+
+      {/* ✅ Сообщение о прохождении уровня (оверлей) */}
+      {won && (
+        <div className="win-overlay">
+          <div className="win-modal">
+            <h2>🎉 Уровень пройден!</h2>
+            <p>Молодец! Хочешь продолжить?</p>
+
+            <div className="win-actions">
+              <button onClick={restartLevel}>🔁 Повторить</button>
+              <button
+                onClick={nextLevel}
+                disabled={levelIndex === levels.length - 1}
+              >
+                ➡️ Следующий
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
