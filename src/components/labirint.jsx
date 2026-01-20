@@ -278,16 +278,19 @@ export default function MazeGame() {
       </div>
 
       {/* ✅ Стрелки для телефонов */}
-      <div className="mobile-controls">
-        <button onClick={() => move(0, -1)}><HiArrowSmUp/></button>
+<div className="mobile-controls">
+  <div className="cell" />
+  <button className="cell btn" onClick={() => move(0, -1)}><HiArrowSmUp color="white"/></button>
+  <div className="cell" />
 
-        <div className="mobile-row">
-          <button onClick={() => move(-1, 0)}><HiArrowSmLeft/></button>
-          <button onClick={() => move(1, 0)}><HiArrowSmRight/></button>
-        </div>
+  <button className="cell btn" onClick={() => move(-1, 0)}><HiArrowSmLeft color="white"/></button>
+  <div className="cell center-space" />
+  <button className="cell btn" onClick={() => move(1, 0)}><HiArrowSmRight color="white"/></button>
 
-        <button onClick={() => move(0, 1)}><HiArrowSmDown/></button>
-      </div>
+  <div className="cell" />
+  <button className="cell btn" onClick={() => move(0, 1)}><HiArrowSmDown color="white"/></button>
+  <div className="cell" />
+</div>
 
       {/* ✅ Сообщение о прохождении уровня (оверлей) */}
       {won && (

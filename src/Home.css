@@ -80,21 +80,21 @@
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
 }
 .card1{
-    background-image: url("/klad.png");
+    background-image: url("/klad.webp");
     background-size: cover;      /* НЕ режет */
     background-position: center;
     background-repeat: no-repeat;
 
 }
 .card2{
-    background-image: url("/diff.png");
+    background-image: url("/diff.webp");
     background-size: cover;      /* НЕ режет */
     background-position: center;
     background-repeat: no-repeat;
     
 }
 .card3{
-    background-image: url("/labirint.png");
+    background-image: url("/labirint.webp");
     background-size: cover;      /* НЕ режет */
     background-position: center;
     background-repeat: no-repeat;

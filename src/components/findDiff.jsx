@@ -33,22 +33,22 @@ const LEVELS = [
   {
     id: "lvl1",
     title: "Уровень 1",
-    leftImg: "/left-cat.png",
-    rightImg: "/right-cat%20(2).png",
+    leftImg: "/left-cat.webp",
+    rightImg: "/right-cat%20(2).webp",
     differences: BASE_DIFFERENCES,
   },
   {
     id: "lvl2",
     title: "Уровень 2",
-    leftImg: "/left-boy.png",
-    rightImg: "/right-boy.png",
+    leftImg: "/left-boy.webp",
+    rightImg: "/right-boy.webp",
     differences: BASE_DIFFERENCES2,
   },
   {
     id: "lvl3",
     title: "Уровень 3",
-    leftImg: "/left-tigrenok1.png",
-    rightImg: "/right-tigrenok1.png",
+    leftImg: "/left-tigrenok1.webp",
+    rightImg: "/right-tigrenok1.webp",
     differences: BASE_DIFFERENCES3,
   },
 ];
