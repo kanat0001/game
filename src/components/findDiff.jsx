@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import "./DifferencesGame.css";
+import "./differencesGame.css";
 
 const BASE_DIFFERENCES = [
   { x: 51.8, y: 36, r: 5 },
