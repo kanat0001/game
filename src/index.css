@@ -1,25 +1,16 @@
-html,
-body {
-  height: 100%;
+html, body {
   margin: 0;
   font-family: "Fredoka", sans-serif;
-
-
+  /* height: 100%;  <-- убрать */
+  min-height: 100%;
 }
 
 body {
   min-height: 100vh;
 
-  background-image: url("/bg2.jpg");
-  background-size: cover;        /* ключевое */
-  background-position: center;
-  background-repeat: no-repeat;
-
-  /* чтобы не дергалось на мобилках */
-  background-attachment: scroll;
-
-  background-color: #020617;
+  background: 
+    url("/bg2.jpg") center / cover no-repeat;
+  background-color: #020617; /* низ страницы, если контента больше */
 
   color: #45acdb;
-
 }

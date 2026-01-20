@@ -10,7 +10,7 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
 
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    margin: 40px auto; /* ⬅ центр по горизонтали */
+    margin: 40px auto; 
 }
 
 .title {
@@ -50,14 +50,16 @@
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
 }
 
-.wrapper-card{  
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    width: 100%;
-    
-
+.wrapper-card {  
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  width: 100%;
 }
+
+/* ⬇️ когда экран меньше 1200px */
+
+
 .cardStyle {
   display: flex;
   height: 300px;
@@ -97,4 +99,60 @@
     background-position: center;
     background-repeat: no-repeat;
     
+}
+
+@media (max-width: 1200px) {
+    .title{
+        margin: 20px auto; 
+        height: 162px;
+
+    }
+    .title h1{
+        font-size: 36px;
+        margin-bottom: 12px;
+
+    }
+    .title p{
+        font-size: 22px;
+        margin-bottom: 22px;
+
+    }
+
+  .wrapper-card {
+    flex-wrap: wrap;
+  }
+  .cardStyle{
+      margin-top: 40px;
+      height: 300px;
+      width: 400px;
+  }
+}
+@media (max-width: 1200px) {
+    .cardStyle{
+      margin-top: 40px;
+      height: 200px;
+      width: 300px;
+  }
+}
+@media (max-width: 600px) {
+    .title{
+        margin: 10px auto; 
+        height: 120px;
+
+    }
+    .title h1{
+        font-size: 26px;
+        margin-bottom: 6px;
+
+    }
+    .title p{
+        font-size: 20px;
+        margin-bottom: 12px;
+
+    }
+
+    
+    .games button {
+        display: none;
+    }
 }
