@@ -277,22 +277,20 @@ export default function MazeGame() {
         )}
       </div>
 
-      {/* ✅ Стрелки для телефонов */}
 <div className="mobile-controls">
-  <div className="cell" />
-  <button className="cell btn" onClick={() => move(0, -1)}><HiArrowSmUp color="white"/></button>
-  <div className="cell" />
+  <div className="cell1" />
+  <button className="cell1 btn" onClick={() => move(0, -1)}><HiArrowSmUp color="white"/></button>
+  <div className="cell1" />
 
-  <button className="cell btn" onClick={() => move(-1, 0)}><HiArrowSmLeft color="white"/></button>
-  <div className="cell center-space" />
-  <button className="cell btn" onClick={() => move(1, 0)}><HiArrowSmRight color="white"/></button>
+  <button className="cell1 btn" onClick={() => move(-1, 0)}><HiArrowSmLeft color="white"/></button>
+  <div className="cell1 center-space" />
+  <button className="cell1 btn" onClick={() => move(1, 0)}><HiArrowSmRight color="white"/></button>
 
-  <div className="cell" />
-  <button className="cell btn" onClick={() => move(0, 1)}><HiArrowSmDown color="white"/></button>
-  <div className="cell" />
+  <div className="cell1" />
+  <button className="cell1 btn" onClick={() => move(0, 1)}><HiArrowSmDown color="white"/></button>
+  <div className="cell1" />
 </div>
 
-      {/* ✅ Сообщение о прохождении уровня (оверлей) */}
       {won && (
         <div className="win-overlay">
           <div className="win-modal">

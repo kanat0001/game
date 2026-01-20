@@ -42,7 +42,6 @@
   max-width: 100%;
 }
 
-/* ✅ фикс для мобилок: кнопки не “тянутся” при тапе */
 .cell {
   -webkit-appearance: none;
   appearance: none;
@@ -82,9 +81,6 @@
   cursor: default;
 }
 
-/* =========================
-   WIN OVERLAY
-========================= */
 .win-overlay {
   position: fixed;
   inset: 0;
@@ -126,9 +122,6 @@
   cursor: not-allowed;
 }
 
-/* =========================
-   LOSE OVERLAY
-========================= */
 .lose-overlay {
   position: fixed;
   inset: 0;
@@ -163,9 +156,6 @@
   cursor: pointer;
 }
 
-/* =========================
-   ADAPTIVE
-========================= */
 @media (max-width: 768px) {
   .game {
     padding: 12px;
