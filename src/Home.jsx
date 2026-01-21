@@ -91,7 +91,7 @@ export default function Home() {
           <h1>Игры для детей</h1>
           <p>Сначала введи имя — и можно играть</p>
 
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <div  className="input" style={{ display: "flex", gap: 12, alignItems: "center",}}>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
