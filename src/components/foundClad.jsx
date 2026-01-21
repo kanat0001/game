@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import "./TreasureGame.css";
 import { Link } from "react-router-dom";
+import { GiOpenTreasureChest, GiCrossMark } from "react-icons/gi";
+
 
 const SIZE = 10;
 const MAX_ATTEMPTS = 15;
