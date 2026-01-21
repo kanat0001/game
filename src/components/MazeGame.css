@@ -165,8 +165,6 @@ button:hover{
 .win-actions button:active {
   transform: scale(0.97);
 }
-
-/* анимация появления */
 @keyframes pop {
   from {
     transform: scale(0.7);
@@ -177,7 +175,6 @@ button:hover{
     opacity: 1;
   }
 }
-/* На десктопе скрываем стрелки (по желанию) */
 @media (min-width: 768px) {
   .mobile-controls {
     display: none;

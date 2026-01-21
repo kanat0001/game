@@ -4,7 +4,6 @@ import { HiArrowSmDown, HiArrowSmLeft, HiArrowSmRight, HiArrowSmUp } from "react
 import { Link } from "react-router-dom";
 import { updateGameScore } from "../api";
 
-// ✅ УРОВНИ
 const levels = [
   {
     name: "Уровень 1",
@@ -224,7 +223,7 @@ export default function MazeGame() {
     const current = u?.scores?.labyrinth ?? 0;
     const next = current + 1;
 
-    // ✅ сразу обновим UI и localStorage (оптимистично)
+    // сразу обновим UI и localStorage (оптимистично)
     setPoints(next);
     const updatedLocalUser = {
       ...u,
@@ -255,7 +254,7 @@ export default function MazeGame() {
     }
   }
 
-  // ✅ Единая функция движения (клавиатура + кнопки)
+  // Единая функция движения (клавиатура + кнопки)
   function move(dx, dy) {
     if (won) return;
 
@@ -273,7 +272,7 @@ export default function MazeGame() {
       setWon(true);
       if (navigator.vibrate) navigator.vibrate(120);
 
-      // ✅ +1 очко за прохождение уровня
+      // +1 очко за прохождение уровня
       awardPointForLevel();
     }
   }
@@ -381,9 +380,9 @@ export default function MazeGame() {
             {saveError && <p style={{ color: "red" }}>{saveError}</p>}
 
             <div className="win-actions">
-              <button onClick={restartLevel}>🔁 Повторить</button>
+              <button onClick={restartLevel}>Повторить</button>
               <button onClick={nextLevel} disabled={levelIndex === levels.length - 1}>
-                ➡️ Следующий
+                Следующий
               </button>
             </div>
           </div>

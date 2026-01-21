@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { GiTrophyCup } from "react-icons/gi";
 import { createOrGetUser } from "./api";
 import "./Home.css";
 
@@ -15,17 +16,21 @@ function getOrCreateDeviceId() {
   return id;
 }
 
+function calcTotal(scores) {
+  if (!scores) return 0;
+  return (scores.labyrinth ?? 0) + (scores.treasure ?? 0) + (scores.find_different ?? 0);
+}
+
 export default function Home() {
   const [user, setUser] = useState(null);
 
-  // имя для регистрации
   const [name, setName] = useState("");
 
-  // состояния UI
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // при старте: если уже есть user в localStorage — сразу показываем игры
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   useEffect(() => {
     const saved = localStorage.getItem(LS_USER);
     if (saved) {
@@ -34,6 +39,16 @@ export default function Home() {
       } catch {}
     }
   }, []);
+
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === "Escape") setIsProfileOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const totalPoints = useMemo(() => calcTotal(user?.scores), [user]);
 
   async function handleRegister() {
     const trimmed = name.trim();
@@ -60,23 +75,18 @@ export default function Home() {
   }
 
   function handleResetLocal() {
-    // сброс “регистрации” только на этом устройстве
     localStorage.removeItem(LS_USER);
-    // deviceId обычно оставляют, но если хочешь “нового пользователя” — раскомментируй:
-    // localStorage.removeItem(LS_DEVICE_ID);
 
     setUser(null);
     setName("");
     setError("");
+    setIsProfileOpen(false);
   }
 
   // 1) если юзер НЕ зарегистрирован — показываем форму
   if (!user) {
     return (
-      <div
-        className="wrapper"
-        style={{ maxWidth: 1400, margin: "0 auto", padding: 24 }}
-      >
+      <div className="wrapper" style={{ maxWidth: 1400, margin: "0 auto", padding: 24 }}>
         <div className="title">
           <h1>Игры для детей</h1>
           <p>Сначала введи имя — и можно играть</p>
@@ -105,12 +115,15 @@ export default function Home() {
     );
   }
 
-  // 2) если юзер ЕСТЬ — показываем твой Home как был
+  // 2) если юзер ЕСТЬ — показываем игры + кнопку профиля
   return (
-    <div
-      className="wrapper"
-      style={{ maxWidth: 1400, margin: "0 auto", padding: 24 }}
-    >
+    <div className="wrapper" style={{ maxWidth: 1400, margin: "0 auto", padding: 24 }}>
+      <div className="home-topbar">
+        <button className="profileBtn" onClick={() => setIsProfileOpen(true)}>
+          Профиль
+        </button>
+      </div>
+
       <div className="title">
         <h1>Игры для детей</h1>
         <p>
@@ -118,31 +131,81 @@ export default function Home() {
         </p>
 
         <div className="games">
-          <Link to="/treasure">
-            <button>Найди клад</button>
+          <Link  to="/treasure">
+            <button className="games-button">Найди клад</button>
           </Link>
 
           <Link to="/differences">
-            <button>Найди различия</button>
+            <button className="games-button" > Найди различия</button>
           </Link>
 
           <Link to="/maze">
-            <button>Лабиринт</button>
+            <button className="games-button" > Лабиринт</button>
           </Link>
 
-          <button onClick={handleResetLocal} style={{ marginLeft: 12 }}>
-            Сбросить имя
-          </button>
+          <Link to="/leaderboard">
+            <button><GiTrophyCup color="white" className="icon"  /></button>
+          </Link>
         </div>
       </div>
 
       <div className="wrapper-card">
         <Link to="/treasure" className="cardStyle card1"></Link>
-
         <Link to="/differences" className="cardStyle card2"></Link>
-
         <Link to="/maze" className="cardStyle card3"></Link>
       </div>
+
+      <div
+        className={`profileOverlay ${isProfileOpen ? "open" : ""}`}
+        onClick={() => setIsProfileOpen(false)}
+      />
+
+      <aside className={`profileDrawer ${isProfileOpen ? "open" : ""}`} aria-hidden={!isProfileOpen}>
+        <div className="profileHeader">
+          <h3>Профиль</h3>
+          <button className="profileClose" onClick={() => setIsProfileOpen(false)} aria-label="Закрыть">
+            ✕
+          </button>
+        </div>
+
+        <div className="profileBody">
+          <div className="profileCard">
+            <div className="profileLabel">Имя</div>
+            <div className="profileValue">{user.name}</div>
+          </div>
+
+          <div className="profileCard">
+            <div className="profileLabel">Очки (всего)</div>
+            <div className="profileValue">{totalPoints}</div>
+          </div>
+
+          <div className="profileCard">
+            <div className="profileLabel">По играм</div>
+            <div className="profileScores">
+              <div className="scoreRow">
+                <span>Лабиринт</span>
+                <b>{user.scores?.labyrinth ?? 0}</b>
+              </div>
+              <div className="scoreRow">
+                <span>Клад</span>
+                <b>{user.scores?.treasure ?? 0}</b>
+              </div>
+              <div className="scoreRow">
+                <span>Различия</span>
+                <b>{user.scores?.find_different ?? 0}</b>
+              </div>
+            </div>
+          </div>
+          <Link to="/leaderboard">
+            <button><GiTrophyCup color="white" className="icon"  /></button>
+          </Link>
+
+          <button className="resetBtn" onClick={handleResetLocal}>
+            Сбросить имя
+          </button>
+
+        </div>
+      </aside>
     </div>
   );
 }

@@ -37,3 +37,19 @@ export async function updateGameScore({ userId, gameName, score }) {
 
   return data; // User
 }
+
+
+export async function getUsers({ skip = 0, limit = 100 } = {}) {
+  const res = await fetch(`/api/v1/users?skip=${skip}&limit=${limit}`);
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok) {
+    const msg =
+      data?.detail?.[0]?.msg ||
+      data?.message ||
+      `Request failed: ${res.status}`;
+    throw new Error(msg);
+  }
+
+  return data; // array of users
+}

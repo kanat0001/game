@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./differencesGame.css";
 import { Link } from "react-router-dom";
+import { awardPoint } from "../score"; 
 
 const BASE_DIFFERENCES = [
   { x: 51.8, y: 36, r: 5 },
@@ -19,7 +20,7 @@ const BASE_DIFFERENCES2 = [
   { x: 73.6, y: 44.4, r: 7 },
   { x: 91, y: 76.6, r: 7 },
   { x: 29.6, y: 37.1, r: 7 },
-  { x: 46.2, y: 67.2, r: 7 }
+  { x: 46.2, y: 67.2, r: 7 },
 ];
 
 const BASE_DIFFERENCES3 = [
@@ -78,6 +79,17 @@ export default function DifferencesGame() {
   const [found, setFound] = useState([]);
   const [message, setMessage] = useState("Кликай по отличиям 🙂");
 
+  // очки и статусы сохранения
+  const [points, setPoints] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+
+  // при входе в игру — читаем очки из localStorage
+  useEffect(() => {
+    const u = JSON.parse(localStorage.getItem("user") || "null");
+    setPoints(u?.scores?.find_different ?? 0);
+  }, []);
+
   const allFound =
     level.differences.length > 0 && found.length === level.differences.length;
 
@@ -88,10 +100,16 @@ export default function DifferencesGame() {
 
   const isLastLevel = levelIndex === LEVELS.length - 1;
 
+  // чтобы очко давалось ОДИН РАЗ за уровень
+  const [awardedThisLevel, setAwardedThisLevel] = useState(false);
+
   function goLevel(nextIndex) {
     setLevelIndex(nextIndex);
     setFound([]);
     setMessage("Кликай по отличиям 🙂");
+    setSaveError("");
+    setSaving(false);
+    setAwardedThisLevel(false);
   }
 
   function nextLevel() {
@@ -103,6 +121,9 @@ export default function DifferencesGame() {
   function restartLevel() {
     setFound([]);
     setMessage("Кликай по отличиям 🙂");
+    setSaveError("");
+    setSaving(false);
+    setAwardedThisLevel(false);
   }
 
   function onImageClick(e) {
@@ -122,6 +143,20 @@ export default function DifferencesGame() {
     setMessage(hit ? "Нашёл! ✅" : "Мимо ❌");
   }
 
+  // Как только уровень полностью найден — даём 1 очко (один раз)
+  useEffect(() => {
+    if (!allFound) return;
+    if (awardedThisLevel) return;
+
+    setAwardedThisLevel(true);
+
+    awardPoint("find_different", {
+      onLocalUpdate: (_, next) => setPoints(next),
+      onSavingChange: setSaving,
+      onError: setSaveError,
+    });
+  }, [allFound, awardedThisLevel]);
+
   const nextDisabled = !allFound || isLastLevel;
 
   return (
@@ -129,13 +164,16 @@ export default function DifferencesGame() {
       {/* Header */}
       <div className="diff-header">
         <h1 className="diff-title">Найди различия — {level.title}</h1>
-        <div className="diff-progress">Найдено: {progressText}</div>
-      </div>
-        <div>
-          <Link to="/">
-            <button style={{ marginBottom: 20 }}>Домой</button>
-          </Link>
+        <div className="diff-progress">
+          Найдено: {progressText} • Очки: <b>{points}</b>
         </div>
+      </div>
+
+      <div>
+        <Link to="/">
+          <button style={{ marginBottom: 20 }}>Домой</button>
+        </Link>
+      </div>
 
       {/* Controls */}
       <div className="diff-controls">
@@ -207,11 +245,11 @@ export default function DifferencesGame() {
         ))}
       </div>
 
-      {/* ✅ Оверлей после прохождения уровня */}
+      {/* Оверлей после прохождения уровня */}
       {allFound && (
         <div className="diff-win-overlay">
           <div className="diff-win-modal">
-            <div className="diff-win-emoji">🎉✨🧩</div>
+            <div className="diff-win-emoji"></div>
 
             <h2 className="diff-win-title">
               {isLastLevel ? "Ты прошёл все уровни!" : "Уровень пройден!"}
@@ -223,9 +261,15 @@ export default function DifferencesGame() {
                 : "Круто! Хочешь перейти дальше или сыграть ещё раз?"}
             </p>
 
+            {saving && <p>Сохраняю очко...</p>}
+            {saveError && <p style={{ color: "red" }}>{saveError}</p>}
+
             <div className="diff-win-actions">
-              <button className="diff-win-btn diff-win-btn-repeat" onClick={restartLevel}>
-                🔁 Ещё раз
+              <button
+                className="diff-win-btn diff-win-btn-repeat"
+                onClick={restartLevel}
+              >
+                Ещё раз
               </button>
 
               <button
@@ -235,7 +279,7 @@ export default function DifferencesGame() {
                 onClick={nextLevel}
                 disabled={isLastLevel}
               >
-                🚀 Дальше
+                 Дальше
               </button>
             </div>
           </div>

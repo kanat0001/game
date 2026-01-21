@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./TreasureGame.css";
 import { Link } from "react-router-dom";
 import { GiOpenTreasureChest, GiCrossMark } from "react-icons/gi";
-
+import { awardPoint } from "../score";
 
 const SIZE = 10;
 const MAX_ATTEMPTS = 15;
@@ -50,7 +50,18 @@ export default function TreasureGame() {
   const [found, setFound] = useState(false);
   const [lost, setLost] = useState(false);
 
-  // ✅ как ты просил — оставляем won (для оверлея)
+  // очки и статусы сохранения
+  const [points, setPoints] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+
+  // при входе в игру — читаем очки из localStorage
+  useEffect(() => {
+    const u = JSON.parse(localStorage.getItem("user") || "null");
+    setPoints(u?.scores?.treasure ?? 0);
+  }, []);
+
+  // как ты просил — оставляем won (для оверлея)
   const won = found;
 
   const hint = useMemo(() => {
@@ -67,9 +78,13 @@ export default function TreasureGame() {
     setLastClick(null);
     setFound(false);
     setLost(false);
+
+    // сбрасываем статусы сохранения (очки НЕ трогаем)
+    setSaving(false);
+    setSaveError("");
   }
 
-  // ✅ названия как в твоём оверлее
+  // названия как в твоём оверлее
   function restartLevel() {
     newGame();
   }
@@ -118,6 +133,13 @@ export default function TreasureGame() {
     if (r === treasure.r && c === treasure.c) {
       setFound(true);
       setLost(false);
+
+      // +1 очко за победу (treasure)
+      awardPoint("treasure", {
+        onLocalUpdate: (_, next) => setPoints(next),
+        onSavingChange: setSaving,
+        onError: setSaveError,
+      });
     }
   }
 
@@ -146,20 +168,25 @@ export default function TreasureGame() {
   return (
     <div className="game">
       <h1 className="game-title">🪙 Найди клад</h1>
-        <div>
-          <Link to="/">
-            <button style={{ marginBottom: 20 }}>Домой</button>
-          </Link>
-        </div>
+
+      <div>
+        <Link to="/">
+          <button style={{ marginBottom: 20 }}>Домой</button>
+        </Link>
+      </div>
 
       <div className="game-toolbar">
         <button onClick={newGame}>Новая игра</button>
+
         <div>
           Попытки: {attempts}/{MAX_ATTEMPTS}
         </div>
+
         <div>
-          {lost ? "Попытки закончились 😢" : hint || "Сделай первый клик"}
+          Очки: <b>{points}</b>
         </div>
+
+        <div>{lost ? "Попытки закончились 😢" : hint || "Сделай первый клик"}</div>
       </div>
 
       <div
@@ -178,27 +205,36 @@ export default function TreasureGame() {
               className={`cell ${blocked ? "disabled" : "active"}`}
               style={{ background: cellBg(r, c) }}
             >
-              {found && isTreasure ? <GiOpenTreasureChest size={22}/> : opened.has(keyOf(r, c)) ? <GiCrossMark size={22} color="white"/>  : ""} 
+              {found && isTreasure ? (
+                <GiOpenTreasureChest size={22} />
+              ) : opened.has(keyOf(r, c)) ? (
+                <GiCrossMark size={22} color="white" />
+              ) : (
+                ""
+              )}
             </button>
           );
         })}
       </div>
 
-      {/* ✅ Сообщение о прохождении уровня (оверлей) */}
+      {/* Сообщение о прохождении уровня (оверлей) */}
       {won && (
         <div className="win-overlay">
           <div className="win-modal">
             <h2>🎉 Уровень пройден!</h2>
             <p>Молодец! Хочешь сыграть еще раз?</p>
 
+            {saving && <p>Сохраняю очко...</p>}
+            {saveError && <p style={{ color: "red" }}>{saveError}</p>}
+
             <div className="win-actions">
-              <button onClick={restartLevel}>🔁 Повторить</button>
+              <button onClick={restartLevel}>Повторить</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ✅ Сообщение о проигрыше (оверлей) */}
+      {/* Сообщение о проигрыше (оверлей) */}
       {lost && (
         <div className="lose-overlay">
           <div className="lose-modal">
@@ -206,7 +242,7 @@ export default function TreasureGame() {
             <p>Попытки закончились. Сыграем ещё раз?</p>
 
             <div className="lose-actions">
-              <button onClick={newGame}>🔁 Играть заново</button>
+              <button onClick={newGame}> Играть заново</button>
             </div>
           </div>
         </div>

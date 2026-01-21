@@ -1,7 +1,6 @@
 html, body {
   margin: 0;
   font-family: "Fredoka", sans-serif;
-  /* height: 100%;  <-- убрать */
   min-height: 100%;
 }
 
@@ -10,7 +9,7 @@ body {
 
   background: 
     url("/bg.webp") center / cover no-repeat;
-  background-color: #020617; /* низ страницы, если контента больше */
+  background-color: #020617;
 
   color: #45acdb;
 }
